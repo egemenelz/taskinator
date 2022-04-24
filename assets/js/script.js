@@ -3,6 +3,7 @@ var tasksToDoEl = document.querySelector(".task-list");
 var formEl = document.querySelector("#task-form");
 var taskNameInput = document.querySelector("input[name='task-name']");
 var taskTypeInput = document.querySelector("select[name='task-type']");
+var pageContentEl = document.querySelector("#page-content");
 var taskIdCounter = 0;
 
 
@@ -10,7 +11,7 @@ function createTaskEl(taskDataObj) {
     // create list item
     var listItemEl = document.createElement("li");
     listItemEl.className = "task-item";
-    listItemEl.setAttribute("data-task-id", taskIdCounter++)
+    listItemEl.setAttribute("data-task-id", taskIdCounter)
     // create div to hold task info and add to list item
     var taskInfoEl = document.createElement("div");
     // give it a class name
@@ -20,12 +21,12 @@ function createTaskEl(taskDataObj) {
     taskInfoEl.innerHTML = "<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
 
     listItemEl.appendChild(taskInfoEl);
-    
+
     listItemEl.appendChild(createTaskActions(taskIdCounter))
-    
+
     // add entire list item to list
     tasksToDoEl.appendChild(listItemEl);
-    
+    taskIdCounter
 }
 function createTaskActions(taskId) {
     var actionContainerEl = document.createElement("div");
@@ -87,6 +88,22 @@ function taskFormHandler(event) {
     createTaskEl(taskDataObj);
 }
 
+function taskButtonHandler(event) {
+    // console.log(event.target);
+    if (event.target.matches(".delete-btn")) {
+        var taskID = event.target.getAttribute("data-task-id");
+        console.log(taskID)
+        deleteTask(taskID)
+    }
+}
+
+function deleteTask(taskID) {
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskID + "']");
+    console.log(taskSelected)
+    taskSelected.remove();
+}
+
 // The submit event listens for two possible actions to occur within a form. This makes it more accessible and intuitive for users, as they don’t always have to find the button for submitting and click it.
 formEl.addEventListener("submit", taskFormHandler);
+pageContentEl.addEventListener("click", taskButtonHandler);
 // buttonEl.addEventListener("click", createTaskHandler)
